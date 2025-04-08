@@ -1,0 +1,48 @@
+class Node{
+    int val;
+    Node left;
+    Node right;
+    Node(int val){
+        this.val= val;
+        left= null;
+        right=null;
+    }
+}
+class Data{
+    Node node;
+    int col;
+    Data(Node node, int col){
+        this.node=node;
+        this.col=col;
+    }
+}
+solve(Node A){
+    Queue<Data> Q= new LinkedList<>();
+    Q.add(A,0);
+    HashMap<Integer, ArrayList<Integer>> map= new HashMap<Integer, ArrayList<Integer>>();
+    int mini= Integer.MAX_VALUE;
+    int maxi= Integer.MIN_VALUE;
+    While(!Q.isEmpty()){
+        int sz= Q.size();
+        for(int i=0;i<sz;i++){
+            Data curr= Q.poll();
+            Node CurrNode=curr.node;
+            int currdata= curr.col;
+            mini= Math.min(mini, curr.col);
+            maxi= Math.max(maxi, curr.col);
+            if(map.containsKey(currdata)){
+                map.get(currdata).add(CurrNode.val);
+            }else{
+                ArrayList<Integer> arr= new ArrayList<Integer>();
+                arr.add(CurrNode.val);
+                map.put(currdata,arr);
+            }
+            if(CurrNode.left != null) Q.add(new Data(CurrNode.left , currdata-1));
+            if(CurrNode.right != null) Q.add(new Data(CurrNode.right , currdata+1));
+        }
+        ArrayList<ArrayList<Integer>> ans= new ArrayList<ArrayList<Integer>>();
+        for(int i=mini; i<= maxi;i++){
+            ans.add(map.get(i));
+        }
+    }
+}
